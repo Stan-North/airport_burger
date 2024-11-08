@@ -12,12 +12,13 @@ import java.math.BigDecimal;
 
 public class SteakHouseIT {
 
+
     @Test
     @DisplayName("работа ресторана")
     public void steakHouseWorkSuccess() {
-        Waitress waitress = Mockito.spy(Waitress.class);
-        Kitchen kitchen = Mockito.spy(Kitchen.class);
-        PayTerminal payTerminal = Mockito.spy(PayTerminal.class);
+        Waitress waitress = new Waitress();
+        Kitchen kitchen = new Kitchen();
+        PayTerminal payTerminal = new PayTerminal();
         Steakhouse steakhouse = new Steakhouse(waitress, kitchen, payTerminal);
 
         Paycheck paycheck = steakhouse.makeOrder(DishType.BURGER, Currency.RUB);
@@ -32,8 +33,8 @@ public class SteakHouseIT {
     @Test
     @DisplayName("проверка качества еды")
     public void foodQualitySuccess() {
-        Waitress waitress = Mockito.spy(Waitress.class);
-        Kitchen kitchen = Mockito.spy(Kitchen.class);
+        Waitress waitress = new Waitress();
+        Kitchen kitchen = new Kitchen();
         PayTerminal payTerminalMock = Mockito.mock(PayTerminal.class);
         Mockito.when(payTerminalMock.pay(DishType.RIBS, Currency.RUB)).thenReturn(
                 new Paycheck(BigDecimal.valueOf(700), Currency.RUB, DishType.RIBS));
@@ -49,14 +50,11 @@ public class SteakHouseIT {
         Assertions.assertEquals(DishType.RIBS, dish.getDishType());
     }
 
+
     @Test
     @DisplayName("Покупка ребер за рубли")
     public void buyRibsByRubles() {
         PayTerminal payTerminal = Mockito.spy(PayTerminal.class);
-        BigDecimal price = DishType.RIBS.getPrice().multiply(BigDecimal.valueOf(1));
-        Mockito.doReturn(new Paycheck(price, Currency.RUB, DishType.RIBS))
-                .when(payTerminal).pay(DishType.RIBS, Currency.RUB);
-
         Waitress waitress = Mockito.mock(Waitress.class);
         Mockito.when(waitress.giveOrderToKitchen(Mockito.any(), Mockito.any())).thenReturn(true);
         Kitchen kitchen = Mockito.mock(Kitchen.class);
@@ -73,7 +71,6 @@ public class SteakHouseIT {
         PayTerminal payTerminal = Mockito.spy(PayTerminal.class);
         Mockito.doReturn(new Paycheck(BigDecimal.valueOf(1), Currency.USD, DishType.FRIED_POTATO))
                 .when(payTerminal).pay(DishType.FRIED_POTATO, Currency.USD);
-
         Waitress waitress = Mockito.mock(Waitress.class);
         Mockito.when(waitress.giveOrderToKitchen(Mockito.any(), Mockito.any())).thenReturn(true);
         Kitchen kitchen = Mockito.mock(Kitchen.class);
@@ -90,7 +87,6 @@ public class SteakHouseIT {
         PayTerminal payTerminal = Mockito.spy(PayTerminal.class);
         Mockito.doReturn(new Paycheck(BigDecimal.valueOf(1), Currency.MOZAMBICAN_DOLLARS, DishType.BURGER))
                 .when(payTerminal).pay(DishType.BURGER, Currency.MOZAMBICAN_DOLLARS);
-
         Waitress waitress = Mockito.mock(Waitress.class);
         Mockito.when(waitress.giveOrderToKitchen(Mockito.any(), Mockito.any())).thenReturn(true);
         Kitchen kitchen = Mockito.mock(Kitchen.class);
